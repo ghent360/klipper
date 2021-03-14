@@ -39,9 +39,16 @@ Configuration of the primary micro-controller.
 serial:
 #   The serial port to connect to the MCU. If unsure (or if it
 #   changes) see the "Where's my serial port?" section of the FAQ.
-#   This parameter must be provided.
+#   This parameter must be provided when using a serial port.
 #baud: 250000
 #   The baud rate to use. The default is 250000.
+#canbus_uuid:
+#   If using a device connected to a CAN bus then this sets the unique
+#   chip identifier to connect to. This value must be provided when using
+#   CAN bus for communication.
+#canbus_interface:
+#   If using a device connected to a CAN bus then this sets the CAN
+#   network interface to use. The default is 'can0'.
 #pin_map:
 #   This option may be used to enable Arduino pin name aliases. The
 #   default is to not enable the aliases.
@@ -2226,6 +2233,19 @@ pin:
 #   input speed which reliably drives the fan without stalls. Set
 #   off_below to the duty cycle corresponding to this value (for
 #   example, 12% -> 0.12) or slightly higher.
+#tachometer_pin:
+#   Tachometer input pin for monitoring fan speed. A pullup is generally
+#   required. This parameter is optional.
+#tachometer_ppr: 2
+#   When tachometer_pin is specified, this is the number of pulses per
+#   revolution of the tachometer signal. For a BLDC fan this is
+#   normally half the number of poles. The default is 2.
+#tachometer_poll_interval: 0.0015
+#   When tachometer_pin is specified, this is the polling period of the
+#   tachometer pin, in seconds. The default is 0.0015, which is fast
+#   enough for fans below 10000 RPM at 2 PPR. This must be smaller than
+#   30/(tachometer_ppr*rpm), with some margin, where rpm is the
+#   maximum speed (in RPM) of the fan.
 ```
 
 ## [heater_fan]
@@ -2244,6 +2264,9 @@ a shutdown_speed equal to max_power.
 #hardware_pwm:
 #kick_start_time:
 #off_below:
+#tachometer_pin:
+#tachometer_ppr:
+#tachometer_poll_interval:
 #   See the "fan" section for a description of the above parameters.
 #heater: extruder
 #   Name of the config section defining the heater that this fan is
@@ -2277,6 +2300,9 @@ watched component.
 #hardware_pwm:
 #kick_start_time:
 #off_below:
+#tachometer_pin:
+#tachometer_ppr:
+#tachometer_poll_interval:
 #   See the "fan" section for a description of the above parameters.
 #fan_speed: 1.0
 #   The fan speed (expressed as a value from 0.0 to 1.0) that the fan
@@ -2317,6 +2343,9 @@ additional information.
 #hardware_pwm:
 #kick_start_time:
 #off_below:
+#tachometer_pin:
+#tachometer_ppr:
+#tachometer_poll_interval:
 #   See the "fan" section for a description of the above parameters.
 #sensor_type:
 #sensor_pin:
@@ -2362,6 +2391,9 @@ with the SET_FAN_SPEED
 #hardware_pwm:
 #kick_start_time:
 #off_below:
+#tachometer_pin:
+#tachometer_ppr:
+#tachometer_poll_interval:
 #   See the "fan" section for a description of the above parameters.
 ```
 
@@ -2560,6 +2592,10 @@ pins:
 
 # TMC stepper driver configuration
 
+Configuration of Trinamic stepper motor drivers in UART/SPI mode.
+Additional information is in the [TMC Drivers guide](TMC_Drivers.md)
+and in the [command reference](G-Codes.md#tmc-stepper-drivers).
+
 ## [tmc2130]
 
 Configure a TMC2130 stepper motor driver via SPI bus. To use this
@@ -2627,8 +2663,7 @@ run_current:
 #   pin which may be used as the stepper's endstop_pin. Doing this
 #   enables "sensorless homing". (Be sure to also set driver_SGT to an
 #   appropriate sensitivity value.) The default is to not enable
-#   sensorless homing. See docs/Sensorless_Homing.md for details on
-#   how to configure this.
+#   sensorless homing.
 ```
 
 ## [tmc2208]
@@ -2792,7 +2827,7 @@ run_current:
 #driver_SEMAX: 0
 #driver_SEUP: 0
 #driver_SEMIN: 0
-#driver_SFILT: 1
+#driver_SFILT: 0
 #driver_SGT: 0
 #driver_SLPH: 0
 #driver_SLPL: 0
@@ -2893,8 +2928,7 @@ run_current:
 #   pin which may be used as the stepper's endstop_pin. Doing this
 #   enables "sensorless homing". (Be sure to also set driver_SGT to an
 #   appropriate sensitivity value.) The default is to not enable
-#   sensorless homing. See docs/Sensorless_Homing.md for details on
-#   how to configure this.
+#   sensorless homing.
 ```
 
 # Run-time stepper motor current configuration
@@ -3055,9 +3089,10 @@ lcd_type:
 #   The type of LCD chip in use. This may be "hd44780" (which is used
 #   in "RepRapDiscount 2004 Smart Controller" type displays), "st7920"
 #   (which is used in "RepRapDiscount 12864 Full Graphic Smart
-#   Controller" type displays), "uc1701" (which is used in "MKS Mini
-#   12864" type displays), "ssd1306", or "sh1106". This parameter must
-#   be provided.
+#   Controller" type displays), "emulated_st7920" (which emulate a ST7920
+#   display but won't work properly with the "st7920" display driver),
+#   "uc1701" (which is used in "MKS Mini 12864" type displays),
+#   "ssd1306", or "sh1106". This parameter must be provided.
 #hd44780_protocol_init: True
 #    Perform 8-bit/4-bit protocol initialization on an hd44780 display.
 #    This is necessary on real hd44780 devices.  However, one may
@@ -3080,6 +3115,17 @@ lcd_type:
 #sid_pin:
 #   The pins connected to an st7920 type lcd. These parameters must be
 #   provided when using an st7920 display.
+#en_pin:
+#spi_speed:
+#spi_software_sclk_pin:
+#spi_software_mosi_pin:
+#spi_software_miso_pin:
+#   The pins connected to an emulated_st7920 type lcd. The en_pin corresponds
+#   to the cs_pin of the st7920 type lcd, spi_software_sclk_pin corresponds
+#   to sclk_pin and spi_software_mosi_pin corresponds to sid_pin. The
+#   spi_software_miso_pin needs to be set to an unused pin of the printer
+#   mainboard as the st7920 as no MISO pin but the software spi implementation
+#   requires this pin to be configured. The default spi_speed is 1MHz.
 #cs_pin:
 #a0_pin:
 #rst_pin:
