@@ -2039,13 +2039,13 @@ sensor_pin:
 #   name in the above list.
 ```
 
-## BME280 temperature sensor
+## BMP280/BME280/BME680 temperature sensor
 
-BME280 two wire interface (I2C) environmental sensor. Note that this
-sensor is not intended for use with extruders and heater beds, but
-rather for monitoring ambient temperature (C), pressure (hPa), and
-relative humidity. See
-[sample-macros.cfg](../config/sample-macros.cfg) for a gcode_macro
+BMP280/BME280/BME680 two wire interface (I2C) environmental sensors.
+Note that thoose sensors aee not intended for use with extruders and
+heater beds, but rather for monitoring ambient temperature (C),
+pressure (hPa), relative humidity and in case of the BME680 gas level.
+See [sample-macros.cfg](../config/sample-macros.cfg) for a gcode_macro
 that may be used to report pressure and humidity in addition to
 temperature.
 
@@ -3459,6 +3459,34 @@ information.
 #switch_pin:
 #   The pin on which the switch is connected. This parameter must be
 #   provided.
+```
+
+## [filament_motion_sensor]
+
+Filament Motion Sensor. Support for filament insert and runout
+detection using an encoder that toggles the output pin during filament
+movement through the sensor.
+
+See the [command reference](G-Codes.md#filament-sensor) for more
+information.
+
+```
+[filament_motion_sensor my_sensor]
+detection_length: 7.0
+#   The minimum length of filament pulled through the sensor to trigger
+#   a state change on the switch_pin
+#   Default is 7 mm.
+extruder:
+#   The name of the extruder section this sensor is associated with.
+#   This parameter must be provided.
+switch_pin:
+#pause_on_runout:
+#runout_gcode:
+#insert_gcode:
+#event_delay:
+#pause_delay:
+#   See the "filament_switch_sensor" section for a description of the
+#   above parameters.
 ```
 
 ## [tsl1401cl_filament_width_sensor]
