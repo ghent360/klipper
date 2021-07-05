@@ -271,9 +271,15 @@ usb_init(void)
 {
     if (CONFIG_MACH_STM32F1) {
         // Pull the D+ pin low briefly to signal a new connection
+#if 0        
         gpio_out_setup(GPIO('A', 12), 0);
         udelay(5000);
         gpio_in_setup(GPIO('A', 12), 0);
+#else        
+        gpio_out_setup(GPIO('C', 14), 0);
+        udelay(5000);
+        gpio_out_setup(GPIO('C', 14), 1);
+#endif        
     }
 
     // Enable USB clock
