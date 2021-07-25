@@ -165,6 +165,14 @@ class DataLogger:
                                "method": "adxl345/dump_adxl345",
                                "params": { "sensor": aname,
                                            "response_template": {"q": qname}}})
+            if cfgname.startswith("angle "):
+                aname = cfgname.split()[1]
+                qname = "angle:" + aname
+                self.query_handlers[qname] = self.handle_dump
+                self.send_msg({"id": qname,
+                               "method": "angle/dump_angle",
+                               "params": { "sensor": aname,
+                                           "response_template": {"q": qname}}})
     def handle_dump(self, msg, raw_msg):
         msg_id = msg["id"]
         self.db.setdefault("subscriptions", {})[msg_id] = msg["result"]
