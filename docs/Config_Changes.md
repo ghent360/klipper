@@ -8,6 +8,10 @@ All dates in this document are approximate.
 
 ## Changes
 
+20210815: The adxl345 ACCELEROMETER_MEASURE command no longer supports
+a RATE parameter.  To alter the query rate, update the printer.cfg
+file and issue a RESTART command.
+
 20210814: The analog only pseudo-pins on the atmega168 and atmega328
 have been renamed from PE0/PE1 to PE2/PE3.
 
