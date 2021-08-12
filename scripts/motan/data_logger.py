@@ -153,6 +153,18 @@ class DataLogger:
                                "method": "motion_report/dump_stepper",
                                "params": { "name": stepper,
                                            "response_template": {"q": qname}}})
+        config = status["configfile"]["settings"]
+        for cfgname in config.keys():
+            if cfgname == "adxl345" or cfgname.startswith("adxl345 "):
+                aname = cfgname.split()[-1]
+                qname = "adxl345:" + aname
+                if cfgname == "adxl345":
+                    aname = "default"
+                self.query_handlers[qname] = self.handle_dump
+                self.send_msg({"id": qname,
+                               "method": "adxl345/dump_adxl345",
+                               "params": { "sensor": aname,
+                                           "response_template": {"q": qname}}})
     def handle_dump(self, msg, raw_msg):
         msg_id = msg["id"]
         self.db.setdefault("subscriptions", {})[msg_id] = msg["result"]

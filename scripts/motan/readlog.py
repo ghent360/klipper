@@ -184,6 +184,47 @@ class HandleStepQ:
                 step_data.append((step_time, step_halfpos, step_pos))
 LogHandlers["stepq"] = HandleStepQ
 
+# Extract accelerometer data
+class HandleADXL345:
+    ParametersMsgId = 2
+    ParametersTotal = 3
+    def __init__(self, lmanager, msg_id):
+        self.msg_id = msg_id
+        self.jdispatch = lmanager.get_jdispatch()
+        self.next_accel_time = self.last_accel_time = 0.
+        self.next_accel = self.last_accel = (0., 0., 0.)
+        self.cur_data = []
+        self.data_pos = 0
+    def get_description(self, name_parts):
+        aname = name_parts[2]
+        if aname not in 'xyz':
+            raise error("Unknown adxl345 data selection")
+        axis = 'xyz'.index(aname)
+        return {'label': '%s %s acceleration' % (name_parts[1], aname),
+                'units': 'Acceleration\n(mm/s^2)',
+                'func': (lambda rt: self.pull_accel(rt, axis))}
+    def pull_accel(self, req_time, axis):
+        while 1:
+            if req_time <= self.next_accel_time:
+                adiff = self.next_accel[axis] - self.last_accel[axis]
+                tdiff = self.next_accel_time - self.last_accel_time
+                rtdiff = req_time - self.last_accel_time
+                return self.last_accel[axis] + rtdiff * adiff / tdiff
+            if self.data_pos >= len(self.cur_data):
+                # Read next data block
+                jmsg = self.jdispatch.pull_msg(req_time, self.msg_id)
+                if jmsg is None:
+                    return 0.
+                self.cur_data = jmsg['data']
+                self.data_pos = 0
+                continue
+            self.last_accel = self.next_accel
+            self.last_accel_time = self.next_accel_time
+            self.next_accel_time, x, y, z = self.cur_data[self.data_pos]
+            self.next_accel = (x, y, z)
+            self.data_pos += 1
+LogHandlers["adxl345"] = HandleADXL345
+
 
 ######################################################################
 # Log reading
