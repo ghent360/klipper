@@ -20,17 +20,19 @@ struct gpio_pwm_info {
 
 static const struct gpio_pwm_info pwm_regs[] = {
 #if CONFIG_MACH_STM32F4
-    // From F405/F407 datasheet other models may differ
+    // From F405/F407 datasheet other models may differ.
+    // Where alternative timer/channels exist for the same pin, the config
+    // lines are commented out to avoid pin number conflicts in the table.
     // GPIOA
     {TIM5, GPIO('A', 0),  1, GPIO_FUNCTION(2)},
-    //{TIM2, GPIO('A', 1),  2, GPIO_FUNCTION(1)},
+  //{TIM2, GPIO('A', 1),  2, GPIO_FUNCTION(1)},
     {TIM5, GPIO('A', 1),  2, GPIO_FUNCTION(2)},
-    //{TIM2, GPIO('A', 2),  3, GPIO_FUNCTION(1)},
+  //{TIM2, GPIO('A', 2),  3, GPIO_FUNCTION(1)},
     {TIM5, GPIO('A', 2),  3, GPIO_FUNCTION(2)},
-    //{TIM9, GPIO('A', 2),  1, GPIO_FUNCTION(3)},
-    //{TIM2, GPIO('A', 3),  4, GPIO_FUNCTION(1)},
+  //{TIM9, GPIO('A', 2),  1, GPIO_FUNCTION(3)},
+  //{TIM2, GPIO('A', 3),  4, GPIO_FUNCTION(1)},
     {TIM5, GPIO('A', 3),  4, GPIO_FUNCTION(2)},
-    //{TIM9, GPIO('A', 3),  2, GPIO_FUNCTION(3)},
+  //{TIM9, GPIO('A', 3),  2, GPIO_FUNCTION(3)},
     {TIM3, GPIO('A', 6),  1, GPIO_FUNCTION(2)},
     {TIM3, GPIO('A', 7),  2, GPIO_FUNCTION(2)},
     {TIM1, GPIO('A', 8),  1, GPIO_FUNCTION(1)},
@@ -46,22 +48,22 @@ static const struct gpio_pwm_info pwm_regs[] = {
     {TIM4, GPIO('B', 6),  1, GPIO_FUNCTION(2)},
     {TIM4, GPIO('B', 7),  2, GPIO_FUNCTION(2)},
     {TIM4, GPIO('B', 8),  3, GPIO_FUNCTION(2)},
-    //{TIM10, GPIO('B', 8),  1, GPIO_FUNCTION(3)},
+  //{TIM10, GPIO('B', 8),  1, GPIO_FUNCTION(3)},
     {TIM4, GPIO('B', 9),  4, GPIO_FUNCTION(2)},
-    //{TIM11, GPIO('B', 9),  1, GPIO_FUNCTION(3)},
+  //{TIM11, GPIO('B', 9),  1, GPIO_FUNCTION(3)},
     {TIM2, GPIO('B', 10),  3, GPIO_FUNCTION(1)},
     {TIM2, GPIO('B', 11),  4, GPIO_FUNCTION(1)},
     {TIM12, GPIO('B', 14),  1, GPIO_FUNCTION(9)},
     {TIM12, GPIO('B', 15),  2, GPIO_FUNCTION(9)},
     // GPIOC
     {TIM3, GPIO('C', 6),  1, GPIO_FUNCTION(2)},
-    //{TIM8, GPIO('C', 6),  1, GPIO_FUNCTION(3)},
+  //{TIM8, GPIO('C', 6),  1, GPIO_FUNCTION(3)},
     {TIM3, GPIO('C', 7),  2, GPIO_FUNCTION(2)},
-    //{TIM8, GPIO('C', 7),  2, GPIO_FUNCTION(3)},
+  //{TIM8, GPIO('C', 7),  2, GPIO_FUNCTION(3)},
     {TIM3, GPIO('C', 8),  3, GPIO_FUNCTION(2)},
-    //{TIM8, GPIO('C', 8),  3, GPIO_FUNCTION(3)},
+  //{TIM8, GPIO('C', 8),  3, GPIO_FUNCTION(3)},
     {TIM3, GPIO('C', 9),  4, GPIO_FUNCTION(2)},
-    //{TIM8, GPIO('C', 9),  4, GPIO_FUNCTION(3)},
+  //{TIM8, GPIO('C', 9),  4, GPIO_FUNCTION(3)},
 #ifdef GPIOD
     // GPIOD
     {TIM4, GPIO('D', 12),  1, GPIO_FUNCTION(2)},
