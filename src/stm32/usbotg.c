@@ -7,12 +7,14 @@
 #include <string.h> // NULL
 #include "autoconf.h" // CONFIG_MACH_STM32F446
 #include "board/armcm_boot.h" // armcm_enable_irq
+#include "board/armcm_timer.h" // udelay
 #include "board/io.h" // writel
 #include "board/usb_cdc.h" // usb_notify_ep0
 #include "board/usb_cdc_ep.h" // USB_CDC_EP_BULK_IN
 #include "command.h" // DECL_CONSTANT_STR
 #include "internal.h" // GPIO
 #include "sched.h" // DECL_INIT
+#include "gpio.h"
 
 static void
 usb_irq_disable(void)
@@ -388,6 +390,11 @@ DECL_CONSTANT_STR("RESERVE_PINS_USB", "PA11,PA12");
 void
 usb_init(void)
 {
+    // Force USB re-enumerate on reboot.
+    gpio_out_setup(GPIO('A', 12), 0);
+    udelay(5000);
+    gpio_in_setup(GPIO('A', 12), 0);
+
     // Enable USB clock
     RCC->AHB2ENR |= RCC_AHB2ENR_OTGFSEN;
     while (!(OTG->GRSTCTL & USB_OTG_GRSTCTL_AHBIDL))
