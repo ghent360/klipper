@@ -101,7 +101,7 @@ static const struct gpio_pwm_info pwm_regs[] = {
     {TIM8, GPIO('I', 6),  2, GPIO_FUNCTION(3)},
     {TIM8, GPIO('I', 7),  3, GPIO_FUNCTION(3)},
 #endif
-#else
+#else // Not CONFIG_MACH_STM32F4
     // This is originally for STM32F1, other tables needed per CPU model
     {TIM2, GPIO('A', 0),  1, GPIO_FUNCTION(2)},
     {TIM2, GPIO('A', 1),  2, GPIO_FUNCTION(2)},

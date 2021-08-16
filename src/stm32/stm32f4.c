@@ -78,11 +78,16 @@ gpio_peripheral(uint32_t gpio, uint32_t mode, int pullup)
     gpio_clock_enable(regs);
 
     // Configure GPIO
-    uint32_t mode_bits = mode & 0xf, func = (mode >> 4) & 0xf, od = mode >> 8;
+    uint32_t mode_bits = mode & 0xf;
+    uint32_t func = (mode >> 4) & 0xf;
+    uint32_t od = mode >> 8;
     uint32_t pup = pullup ? (pullup > 0 ? 1 : 2) : 0;
-    uint32_t pos = gpio % 16, af_reg = pos / 8;
-    uint32_t af_shift = (pos % 8) * 4, af_msk = 0x0f << af_shift;
-    uint32_t m_shift = pos * 2, m_msk = 0x03 << m_shift;
+    uint32_t pos = gpio % 16;
+    uint32_t af_reg = pos / 8;
+    uint32_t af_shift = (pos % 8) * 4;
+    uint32_t af_msk = 0x0f << af_shift;
+    uint32_t m_shift = pos * 2;
+    uint32_t m_msk = 0x03 << m_shift;
 
     regs->AFR[af_reg] = (regs->AFR[af_reg] & ~af_msk) | (func << af_shift);
     regs->MODER = (regs->MODER & ~m_msk) | (mode_bits << m_shift);
