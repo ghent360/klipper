@@ -455,6 +455,7 @@ Device::create()
         case 0x10010006: // G17A
         case 0x1001000b: // E17A
         case 0x10010010: // G17A WLCSP
+        case 0x10010094: // E17D
             _family = FAMILY_SAMD21;
             flashPtr = new D2xNvmFlash(_samba, "ATSAMD21x17", 2048, 64, 0x20002000, 0x20004000) ;
             break;
