@@ -12,6 +12,10 @@ MCU := $(shell echo $(CONFIG_MCU) | tr a-z A-Z)
 CFLAGS-$(CONFIG_MACH_SAMD21) += -mcpu=cortex-m0plus -Ilib/samd21/samd21a/include
 CFLAGS-$(CONFIG_MACH_SAMD51) += -mcpu=cortex-m4 -Ilib/samd51/samd51a/include
 CFLAGS-$(CONFIG_MACH_SAMD51) += -mfpu=fpv4-sp-d16 -mfloat-abi=hard
+
+CFLAGS-$(CONFIG_MACH_SAMD21E15) += -DBLDR_RAM_START=0x20000FFC
+CFLAGS-$(CONFIG_MACH_SAMD21E17) += -DBLDR_RAM_START=0x20003FFC
+
 CFLAGS += $(CFLAGS-y) -D__$(MCU)__ -mthumb -Ilib/cmsis-core
 
 CFLAGS_klipper.elf += --specs=nano.specs --specs=nosys.specs
