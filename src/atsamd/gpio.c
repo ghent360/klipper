@@ -23,7 +23,8 @@ gpio_peripheral(uint32_t gpio, char ptype, int32_t pull_up)
     PortGroup *pg = &PORT->Group[bank];
     if (ptype) {
         volatile uint8_t *pmux = &pg->PMUX[bit/2].reg;
-        uint8_t shift = (bit & 1) ? 4 : 0, mask = ~(0xf << shift);
+        uint8_t shift = (bit & 1) ? 4 : 0;
+        uint8_t mask = ~(0xf << shift);
         *pmux = (*pmux & mask) | ((ptype - 'A') << shift);
     }
     if (pull_up) {
