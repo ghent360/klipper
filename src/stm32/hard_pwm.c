@@ -20,7 +20,7 @@ struct gpio_pwm_info {
 };
 
 static const struct gpio_pwm_info pwm_regs[] = {
-#if CONFIG_MACH_STM32F4
+#if CONFIG_MACH_STM32F4x5
     // From F405/F407 datasheet other models may differ.
     // Where alternative timer/channels exist for the same pin, the config
     // lines are commented out to avoid pin number conflicts in the table.
