@@ -15,7 +15,7 @@ The source code "whitespace check" can be run with:
 
 The Klippy regression test suite requires "data dictionaries" from
 many platforms. The easiest way to obtain them is to
-[download them from github](https://github.com/KevinOConnor/klipper/issues/1438).
+[download them from github](https://github.com/Klipper3d/klipper/issues/1438).
 Once the data dictionaries are downloaded, use the following to run
 the regression suite:
 ```
@@ -144,6 +144,11 @@ options - use the `--help` option to see a list. It may also be
 convenient to view/modify the
 [motan_graph.py](../scripts/motan/motan_graph.py) script itself.
 
+The raw data logs produced by the `data_logger.py` tool follow the
+format described in the [API Server](API_Server.md). It may be useful
+to inspect the data with a Unix command like the following:
+`gunzip < mylog.json.gz | tr '\03' '\n' | less`
+
 ## Generating load graphs
 
 The Klippy log file (/tmp/klippy.log) stores statistics on bandwidth,
@@ -219,13 +224,12 @@ cd /path/to/klipper
 make menuconfig
 ```
 
-and compile the micro-controller software for an AVR atmega644p, set
-the MCU frequency to 20Mhz, and select SIMULAVR software emulation
-support. Then one can compile Klipper (run `make`) and then start the
-simulation with:
+and compile the micro-controller software for an AVR atmega644p and
+select SIMULAVR software emulation support. Then one can compile
+Klipper (run `make`) and then start the simulation with:
 
 ```
-PYTHONPATH=/path/to/simulavr/src/python/ ./scripts/avrsim.py -m atmega644 -s 20000000 -b 250000 out/klipper.elf
+PYTHONPATH=/path/to/simulavr/src/python/ ./scripts/avrsim.py out/klipper.elf
 ```
 
 Then, with simulavr running in another window, one can run the
@@ -246,7 +250,7 @@ the directions above, but run avrsim.py with a command-line like the
 following:
 
 ```
-PYTHONPATH=/path/to/simulavr/src/python/ ./scripts/avrsim.py -m atmega644 -s 20000000 -b 250000 out/klipper.elf -t PORTA.PORT,PORTC.PORT
+PYTHONPATH=/path/to/simulavr/src/python/ ./scripts/avrsim.py out/klipper.elf -t PORTA.PORT,PORTC.PORT
 ```
 
 The above would create a file **avrsim.vcd** with information on each
