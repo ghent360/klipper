@@ -173,3 +173,4 @@
 #define CONFIG_HAVE_CHIPID 1
 #define CONFIG_HAVE_STEPPER_BOTH_EDGE 1
 #define CONFIG_INLINE_STEPPER_HACK 1
+#include "sdkconfig.h"

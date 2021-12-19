@@ -6,9 +6,15 @@
 
 #include <string.h> // memset
 #include "basecmd.h" // oid_lookup
+#ifndef CONFIG_IDF_TARGET
 #include "board/irq.h" // irq_save
 #include "board/misc.h" // alloc_maxsize
 #include "board/pgm.h" // READP
+#else
+#include "esp/irq.h" // irq_save
+#include "esp/misc.h" // alloc_maxsize
+#include "esp/pgm.h" // READP
+#endif
 #include "command.h" // DECL_COMMAND
 #include "sched.h" // sched_clear_shutdown
 

@@ -7,7 +7,7 @@
 #include <setjmp.h> // setjmp
 #include "autoconf.h" // CONFIG_*
 #include "basecmd.h" // stats_update
-#ifdef CONFIG_IDF_TARGET
+#ifndef CONFIG_IDF_TARGET
 #include "board/io.h" // readb
 #include "board/irq.h" // irq_save
 #include "board/misc.h" // timer_from_us

@@ -6,10 +6,17 @@
 
 #include <stdarg.h> // va_start
 #include <string.h> // memcpy
+#ifndef CONFIG_IDF_TARGET
 #include "board/io.h" // readb
 #include "board/irq.h" // irq_poll
 #include "board/misc.h" // crc16_ccitt
 #include "board/pgm.h" // READP
+#else
+#include "esp/io.h" // readb
+#include "esp/irq.h" // irq_poll
+#include "esp/misc.h" // crc16_ccitt
+#include "esp/pgm.h" // READP
+#endif
 #include "command.h" // output_P
 #include "sched.h" // sched_is_shutdown
 
