@@ -7,10 +7,17 @@
 #include <setjmp.h> // setjmp
 #include "autoconf.h" // CONFIG_*
 #include "basecmd.h" // stats_update
+#ifdef CONFIG_IDF_TARGET
 #include "board/io.h" // readb
 #include "board/irq.h" // irq_save
 #include "board/misc.h" // timer_from_us
 #include "board/pgm.h" // READP
+#else
+#include "esp/io.h" // readb
+#include "esp/irq.h" // irq_save
+#include "esp/misc.h" // timer_from_us
+#include "esp/pgm.h" // READP
+#endif
 #include "command.h" // shutdown
 #include "sched.h" // sched_check_periodic
 #include "stepper.h" // stepper_event

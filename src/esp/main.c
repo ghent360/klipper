@@ -5,8 +5,13 @@
 // This file may be distributed under the terms of the MIT license.
 
 #include <stdio.h>
+#include "sdkconfig.h"
+#include "command.h" // DECL_CONSTANT
+#include "sched.h" // sched_main
+
+DECL_CONSTANT_STR("MCU", CONFIG_IDF_TARGET);
 
 void app_main(void)
 {
-
+    sched_main();
 }
