@@ -1,5 +1,14 @@
 idf_component_register(
-    SRCS "main.c" "timer.c" "../sched.c" "../basecmd.c" "../command.c" "../generic/alloc.c" ${PROJECT_BINARY_DIR}/compile_time_request.c
+    SRCS 
+      "main.c"
+      "timer.c"
+      "console.c"
+      "../sched.c"
+      "../basecmd.c"
+      "../command.c"
+      "../generic/alloc.c"
+      "../generic/crc16_ccitt.c"
+      ${PROJECT_BINARY_DIR}/compile_time_request.c
     INCLUDE_DIRS "." "..")
 
 file(GLOB_RECURSE O_FILES ${PROJECT_BINARY_DIR}/*.obj)
