@@ -82,14 +82,5 @@ irq_wait(void)
         timer_enable_signals();
     }
 #endif
-    irq_poll();
 }
 
-void
-irq_poll(void)
-{
-#if 0    
-    if (readl(&TimerInfo.must_wake_timers))
-        timer_dispatch();
-#endif        
-}

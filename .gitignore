@@ -3,4 +3,10 @@ out
 *.pyc
 .config
 .config.old
+test_cfg/
+build/
+.vscode/
+klippy-env*
+sdkconfig.old
+*.bin
 klippy/.version
