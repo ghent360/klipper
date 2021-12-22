@@ -5,9 +5,16 @@
 // This file may be distributed under the terms of the GNU GPLv3 license.
 
 #include <string.h> // memcpy
+#include "autoconf.h" // CONFIG_xxx
+#ifndef CONFIG_IDF_TARGET
 #include "board/gpio.h" // gpio_out_write
 #include "board/irq.h" // irq_disable
 #include "board/misc.h" // timer_read_time
+#else
+#include "esp/gpio.h" // gpio_out_write
+#include "esp/irq.h" // irq_disable
+#include "esp/misc.h" // timer_read_time
+#endif
 #include "basecmd.h" // oid_alloc
 #include "command.h" // DECL_COMMAND
 #include "sched.h" // DECL_SHUTDOWN

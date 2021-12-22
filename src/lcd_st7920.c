@@ -4,11 +4,17 @@
 //
 // This file may be distributed under the terms of the GNU GPLv3 license.
 
-#include "autoconf.h" // CONFIG_MACH_AVR
+#include "autoconf.h" // CONFIG_xxx
 #include "basecmd.h" // oid_alloc
+#ifndef CONFIG_IDF_TARGET
 #include "board/gpio.h" // gpio_out_write
 #include "board/irq.h" // irq_poll
 #include "board/misc.h" // timer_from_us
+#else
+#include "esp/gpio.h" // gpio_out_write
+#include "esp/irq.h" // irq_poll
+#include "esp/misc.h" // timer_from_us
+#endif
 #include "command.h" // DECL_COMMAND
 #include "sched.h" // DECL_SHUTDOWN
 

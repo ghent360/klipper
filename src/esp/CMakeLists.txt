@@ -15,7 +15,6 @@ SET(BASE_ADC_FILES "../adccmds.c")
 SET(BASE_SPI_FILES "../spicmds.c" "../thermocouple.c")
 SET(BASE_I2C_FILES "../i2ccmds.c")
 SET(BASE_PWM_FILES "../pwmcmds.c")
-SET(BASE_PWM_FILES "../pwmcmds.c")
 SET(BASE_BB_SPI_FILES "../spi_software.c" "../sensor_adxl345.c")
 SET(BASE_BB_GPIO_FILES
   "../lcd_st7920.c"
@@ -33,6 +32,10 @@ SET(SRC_FILES
   ${BASE_GPIO_FILES}
   ${BASE_ADC_FILES}
   ${BASE_SPI_FILES}
+  ${BASE_I2C_FILES}
+  ${BASE_PWM_FILES}
+  ${BASE_BB_SPI_FILES}
+  ${BASE_BB_GPIO_FILES}
   "../generic/alloc.c"
   "../generic/crc16_ccitt.c")
 

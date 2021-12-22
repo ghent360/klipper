@@ -8,7 +8,12 @@
 #include "basecmd.h" //oid_alloc
 #include "command.h"  //sendf
 #include "sched.h" //DECL_COMMAND
+#include "autoconf.h" // CONFIG_xxx
+#ifndef CONFIG_IDF_TARGET
 #include "board/gpio.h" //i2c_write/read/setup
+#else
+#include "esp/gpio.h" //i2c_write/read/setup
+#endif
 
 struct i2cdev_s {
     struct i2c_config i2c_config;

@@ -4,7 +4,12 @@
 //
 // This file may be distributed under the terms of the GNU GPLv3 license.
 
+#include "autoconf.h" // CONFIG_xxx
+#ifndef CONFIG_IDF_TARGET
 #include "board/gpio.h" // gpio_out_setup
+#else
+#include "esp/gpio.h" // gpio_out_setup
+#endif
 #include "basecmd.h" // oid_alloc
 #include "command.h" // DECL_COMMAND
 #include "sched.h" // sched_shutdown
