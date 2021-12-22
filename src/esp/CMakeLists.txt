@@ -25,17 +25,20 @@ SET(BASE_BB_GPIO_FILES
   "../neopixel.c"
   "../pulse_counter.c")
 
+SET(SRC_FILES
+  "main.c"
+  "timer.c"
+  "console.c"
+  ${BASE_FILES}
+  ${BASE_GPIO_FILES}
+  ${BASE_ADC_FILES}
+  ${BASE_SPI_FILES}
+  "../generic/alloc.c"
+  "../generic/crc16_ccitt.c")
+
 idf_component_register(
     SRCS 
-      "main.c"
-      "timer.c"
-      "console.c"
-      ${BASE_FILES}
-      ${BASE_GPIO_FILES}
-      ${BASE_ADC_FILES}
-      ${BASE_SPI_FILES}
-      "../generic/alloc.c"
-      "../generic/crc16_ccitt.c"
+      ${SRC_FILES}
       ${PROJECT_BINARY_DIR}/compile_time_request.c
     INCLUDE_DIRS "." "..")
 
@@ -62,5 +65,5 @@ sed 's/\\\"board\\//\\\"esp\\//g' $dest_dir/compile_time_request.c.in > $dest_di
 )
 add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/compile_time_request.c
     COMMAND bash ARGS ${PROJECT_BINARY_DIR}/ctr_process.sh ${CMAKE_SOURCE_DIR} ${PROJECT_BINARY_DIR} ${O_FILES}
-    DEPENDS ${PROJECT_BINARY_DIR}/ctr_process.sh
+    DEPENDS ${SRC_FILES} ${PROJECT_BINARY_DIR}/ctr_process.sh
 )
