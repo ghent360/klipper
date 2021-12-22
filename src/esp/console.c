@@ -1,4 +1,5 @@
 #include <string.h> // memmove
+#include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "autoconf.h"
@@ -14,7 +15,8 @@
 #define RX_BUFFER_SIZE 192
 
 static uint8_t receive_buf[RX_BUFFER_SIZE], receive_pos;
-static uint8_t transmit_buf[96], transmit_pos, transmit_max;
+static uint8_t transmit_buf[96];
+//static uint8_t transmit_pos, transmit_max;
 
 DECL_CONSTANT("SERIAL_BAUD", CONFIG_SERIAL_BAUD);
 DECL_CONSTANT("RECEIVE_WINDOW", RX_BUFFER_SIZE);
@@ -65,6 +67,7 @@ DECL_TASK(console_task);
 void
 console_sendf(const struct command_encoder *ce, va_list args)
 {
+#if 0    
     // Verify space for message
     uint_fast8_t tpos = readb(&transmit_pos), tmax = readb(&transmit_max);
     if (tpos >= tmax) {
@@ -86,12 +89,14 @@ console_sendf(const struct command_encoder *ce, va_list args)
         writeb(&transmit_max, tmax);
         //serial_enable_tx_irq();
     }
-
+#endif
     // Generate message
-    uint8_t *buf = &transmit_buf[tmax];
+    //uint8_t *buf = &transmit_buf[tmax];
+    uint8_t *buf = &transmit_buf[0];
     uint_fast8_t msglen = command_encode_and_frame(buf, ce, args);
+    fwrite(&transmit_buf[0], 1, msglen, stdout);
 
     // Start message transmit
-    writeb(&transmit_max, tmax + msglen);
+    //writeb(&transmit_max, tmax + msglen);
     //serial_enable_tx_irq();
 }

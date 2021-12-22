@@ -73,6 +73,7 @@ irq_restore(irqstatus_t flag)
 void
 irq_wait(void)
 {
+    irq_poll();
 #if 0    
     // Must atomically sleep until signaled
     if (!readl(&TimerInfo.must_wake_timers)) {
