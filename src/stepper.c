@@ -6,9 +6,15 @@
 
 #include "autoconf.h" // CONFIG_*
 #include "basecmd.h" // oid_alloc
+#ifndef CONFIG_IDF_TARGET
 #include "board/gpio.h" // gpio_out_write
 #include "board/irq.h" // irq_disable
 #include "board/misc.h" // timer_is_before
+#else
+#include "esp/gpio.h" // gpio_out_write
+#include "esp/irq.h" // irq_disable
+#include "esp/misc.h" // timer_is_before
+#endif
 #include "command.h" // DECL_COMMAND
 #include "sched.h" // struct timer
 #include "stepper.h" // stepper_event

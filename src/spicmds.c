@@ -6,7 +6,11 @@
 
 #include <string.h> // memcpy
 #include "autoconf.h" // CONFIG_HAVE_GPIO_BITBANGING
+#ifndef CONFIG_IDF_TARGET
 #include "board/gpio.h" // gpio_out_write
+#else
+#include "esp/gpio.h" // gpio_out_write
+#endif
 #include "basecmd.h" // oid_alloc
 #include "command.h" // DECL_COMMAND
 #include "sched.h" // DECL_SHUTDOWN

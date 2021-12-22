@@ -4,10 +4,17 @@
 //
 // This file may be distributed under the terms of the GNU GPLv3 license.
 
+#include "autoconf.h" // CONFIG_*
 #include "basecmd.h" // oid_alloc
+#ifndef CONFIG_IDF_TARGET
 #include "board/gpio.h" // struct gpio_out
 #include "board/irq.h" // irq_disable
 #include "board/misc.h" // timer_is_before
+#else
+#include "esp/gpio.h" // struct gpio_out
+#include "esp/irq.h" // irq_disable
+#include "esp/misc.h" // timer_is_before
+#endif
 #include "command.h" // DECL_COMMAND
 #include "sched.h" // sched_add_timer
 

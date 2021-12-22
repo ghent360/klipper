@@ -4,9 +4,15 @@
 //
 // This file may be distributed under the terms of the GNU GPLv3 license.
 
+#include "autoconf.h" // CONFIG_INITIAL_PINS
 #include "basecmd.h" // oid_alloc
+#ifndef CONFIG_IDF_TARGET
 #include "board/gpio.h" // struct gpio
 #include "board/irq.h" // irq_disable
+#else
+#include "esp/gpio.h" // struct gpio
+#include "esp/irq.h" // irq_disable
+#endif
 #include "command.h" // DECL_COMMAND
 #include "sched.h" // struct timer
 #include "trsync.h" // trsync_do_trigger

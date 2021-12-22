@@ -6,7 +6,11 @@
 // This file may be distributed under the terms of the GNU GPLv3 license.
 
 #include <string.h> // memcpy
+#ifndef CONFIG_IDF_TARGET
 #include "board/irq.h" // irq_disable
+#else
+#include "esp/irq.h" // irq_disable
+#endif
 #include "basecmd.h" // oid_alloc
 #include "byteorder.h" // be32_to_cpu
 #include "command.h" // DECL_COMMAND

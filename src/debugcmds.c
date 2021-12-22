@@ -4,8 +4,14 @@
 //
 // This file may be distributed under the terms of the GNU GPLv3 license.
 
+#include "autoconf.h" // CONFIG_INITIAL_PINS
+#ifndef CONFIG_IDF_TARGET
 #include "board/io.h" // readl
 #include "board/irq.h" // irq_save
+#else
+#include "esp/io.h" // readl
+#include "esp/irq.h" // irq_save
+#endif
 #include "command.h" // DECL_COMMAND
 
 void
