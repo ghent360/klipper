@@ -24,18 +24,20 @@ SET(BASE_BB_GPIO_FILES
   "../neopixel.c"
   "../pulse_counter.c")
 
+#${BASE_ADC_FILES}
+#${BASE_SPI_FILES}
+#${BASE_I2C_FILES}
+#${BASE_PWM_FILES}
+#${BASE_BB_SPI_FILES}
+#${BASE_BB_GPIO_FILES}
+
 SET(SRC_FILES
   "main.c"
   "timer.c"
   "console.c"
+  "gpio.c"
   ${BASE_FILES}
   ${BASE_GPIO_FILES}
-  ${BASE_ADC_FILES}
-  ${BASE_SPI_FILES}
-  ${BASE_I2C_FILES}
-  ${BASE_PWM_FILES}
-  ${BASE_BB_SPI_FILES}
-  ${BASE_BB_GPIO_FILES}
   "../generic/alloc.c"
   "../generic/crc16_ccitt.c")
 

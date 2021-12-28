@@ -144,7 +144,7 @@ stepper_event_avr(struct timer *t)
 }
 
 // Regular "double scheduled" step function
-uint_fast8_t
+uint_fast8_t IRAM_ATTR
 stepper_event_full(struct timer *t)
 {
     struct stepper *s = container_of(t, struct stepper, time);
@@ -177,7 +177,7 @@ reschedule_min:
 }
 
 // Optimized entry point for step function (may be inlined into sched.c code)
-uint_fast8_t
+uint_fast8_t IRAM_ATTR
 stepper_event(struct timer *t)
 {
     if (HAVE_EDGE_OPTIMIZATION)

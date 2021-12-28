@@ -13,7 +13,7 @@ void irq_restore(irqstatus_t flag);
 void irq_wait(void);
 
 static inline void irq_poll(void) {
-    vTaskDelay(1);
+    vTaskDelay(0);
 }
 
 #endif // __ESP_IRQ_H__
