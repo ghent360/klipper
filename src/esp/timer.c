@@ -10,9 +10,9 @@
 #include "sched.h" // DECL_INIT
 
 //DECL_CONSTANT("CLOCK_FREQ", CONFIG_CLOCK_FREQ);
-DECL_CONSTANT("CLOCK_FREQ", APB_CLK_FREQ);
+DECL_CONSTANT("CLOCK_FREQ", APB_CLK_FREQ / 2);
 
-static const uint32_t ticks_per_us = APB_CLK_FREQ / 1000000;
+static const uint32_t ticks_per_us = APB_CLK_FREQ / (2 * 1000000);
 
 // Return true if time1 is before time2.  Always use this function to
 // compare times as regular C comparisons can fail if the counter
@@ -32,7 +32,7 @@ timer_from_us(uint32_t us)
 
 static uint32_t IRAM_ATTR
 timer_read_time_isr(void) {
-    uint64_t time = timer_group_get_counter_value_in_isr(0, 0);
+    uint64_t time = timer_group_get_counter_value_in_isr(0, 1);
     return (uint32_t)time;
 }
 
@@ -80,10 +80,10 @@ timer_dispatch_many(void)
 static inline void IRAM_ATTR
 timer_set_isr(uint32_t next)
 {
-    uint64_t time = timer_group_get_counter_value_in_isr(0, 0);
+    uint64_t time = timer_group_get_counter_value_in_isr(0, 1);
     // clear low 32 bits
     time &= 0xffffffff00000000;
-    timer_group_set_alarm_value_in_isr(0, 0, time | next);
+    timer_group_set_alarm_value_in_isr(0, 1, time | next);
 }
 
 static bool IRAM_ATTR timer_group_isr_callback(void *args)
@@ -112,10 +112,10 @@ static void
 timer_set(uint32_t next)
 {
     uint64_t time;
-    timer_get_counter_value(0, 0, &time);
+    timer_get_counter_value(0, 1, &time);
     // clear low 32 bits
     time &= 0xffffffff00000000;
-    ESP_ERROR_CHECK(timer_set_alarm_value(0, 0, time | next));
+    ESP_ERROR_CHECK(timer_set_alarm_value(0, 1, time | next));
 }
 
 // Activate timer dispatch as soon as possible
@@ -130,23 +130,23 @@ klipper_timer_init(void)
 {
     timer_config_t config = {
         .clk_src = TIMER_SRC_CLK_APB,
-        .divider = 1,
+        .divider = 2,
         .counter_dir = TIMER_COUNT_UP,
         .counter_en = TIMER_PAUSE,
         .alarm_en = TIMER_ALARM_EN,
         .auto_reload = TIMER_AUTORELOAD_DIS,
     };
-    ESP_ERROR_CHECK(timer_init(0, 0, &config));
+    ESP_ERROR_CHECK(timer_init(0, 1, &config));
 
     // For the timer counter to a initial value
-    ESP_ERROR_CHECK(timer_set_counter_value(0, 0, 0));
+    ESP_ERROR_CHECK(timer_set_counter_value(0, 1, 0));
     // Set alarm value and enable alarm interrupt
-    //ESP_ERROR_CHECK(timer_set_alarm_value(0, 0, user_data->alarm_value));
-    ESP_ERROR_CHECK(timer_enable_intr(0, 0));
+    //ESP_ERROR_CHECK(timer_set_alarm_value(0, 1, user_data->alarm_value));
+    ESP_ERROR_CHECK(timer_enable_intr(0, 1));
     // Hook interrupt callback
-    ESP_ERROR_CHECK(timer_isr_callback_add(0, 0, timer_group_isr_callback, NULL, 0));
+    ESP_ERROR_CHECK(timer_isr_callback_add(0, 1, timer_group_isr_callback, NULL, 0));
     // Start timer
-    ESP_ERROR_CHECK(timer_start(0, 0));
+    ESP_ERROR_CHECK(timer_start(0, 1));
     timer_kick();
 }
 DECL_INIT(klipper_timer_init);
@@ -154,7 +154,7 @@ DECL_INIT(klipper_timer_init);
 uint32_t
 timer_read_time(void) {
     uint64_t time;
-    timer_get_counter_value(0, 0, &time);
+    timer_get_counter_value(0, 1, &time);
     return (uint32_t)time;
 }
 
@@ -185,6 +185,8 @@ irq_restore(irqstatus_t flag)
 void
 irq_wait(void)
 {
+    irq_enable();
     irq_poll();
+    irq_disable();
 }
 
