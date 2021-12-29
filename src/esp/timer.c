@@ -12,24 +12,6 @@
 //DECL_CONSTANT("CLOCK_FREQ", CONFIG_CLOCK_FREQ);
 DECL_CONSTANT("CLOCK_FREQ", APB_CLK_FREQ / 2);
 
-static const uint32_t ticks_per_us = APB_CLK_FREQ / (2 * 1000000);
-
-// Return true if time1 is before time2.  Always use this function to
-// compare times as regular C comparisons can fail if the counter
-// rolls over.
-inline uint8_t IRAM_ATTR
-timer_is_before(uint32_t time1, uint32_t time2)
-{
-    return (int32_t)(time1 - time2) < 0;
-}
-
-// Return the number of clock ticks for a given number of microseconds
-inline uint32_t IRAM_ATTR
-timer_from_us(uint32_t us)
-{
-    return ticks_per_us * us;
-}
-
 static uint32_t IRAM_ATTR
 timer_read_time_isr(void) {
     uint64_t time = timer_group_get_counter_value_in_isr(0, 1);
@@ -60,8 +42,9 @@ timer_dispatch_many(void)
 
         if (unlikely(timer_is_before(tru, now))) {
             // Check if there are too many repeat timers
-            if (diff < (int32_t)(-timer_from_us(1000)))
+            if (diff < (int32_t)(-timer_from_us(1000))) {
                 try_shutdown("Rescheduled timer in the past");
+            }
             if (sched_tasks_busy()) {
                 timer_repeat_until = now + TIMER_REPEAT_TICKS;
                 return now + TIMER_DEFER_REPEAT_TICKS;
@@ -70,10 +53,8 @@ timer_dispatch_many(void)
         }
 
         // Next timer in the past or near future - wait for it to be ready
-        irq_enable();
         while (unlikely(diff > 0))
             diff = next - timer_read_time();
-        irq_disable();
     }
 }
 
@@ -88,11 +69,8 @@ timer_set_isr(uint32_t next)
 
 static bool IRAM_ATTR timer_group_isr_callback(void *args)
 {
-    irq_disable();
     uint32_t next = timer_dispatch_many();
     timer_set_isr(next);
-    irq_enable();
-
     return pdFALSE; // return whether a task switch is needed
 }
 
@@ -101,10 +79,11 @@ void
 timer_task(void)
 {
     uint32_t now = timer_read_time();
-    irq_disable();
-    if (timer_is_before(timer_repeat_until, now))
+    ESP_ERROR_CHECK(timer_disable_intr(0, 1));
+    if (timer_is_before(timer_repeat_until, now)) {
         timer_repeat_until = now;
-    irq_enable();
+    }
+    ESP_ERROR_CHECK(timer_enable_intr(0, 1));
 }
 DECL_TASK(timer_task);
 
@@ -161,25 +140,25 @@ timer_read_time(void) {
 void
 irq_disable(void)
 {
-    portDISABLE_INTERRUPTS();
+    //portDISABLE_INTERRUPTS();
 }
 
 void
 irq_enable(void)
 {
-    portENABLE_INTERRUPTS();
+    //portENABLE_INTERRUPTS();
 }
 
 irqstatus_t
 irq_save(void)
 {
-    return XTOS_SET_INTLEVEL(XCHAL_EXCM_LEVEL);
+    return 0;//XTOS_SET_INTLEVEL(XCHAL_EXCM_LEVEL);
 }
 
 void
 irq_restore(irqstatus_t flag)
 {
-    XTOS_RESTORE_INTLEVEL(flag);
+    //XTOS_RESTORE_INTLEVEL(flag);
 }
 
 void

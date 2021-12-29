@@ -150,7 +150,7 @@ sched_del_timer(struct timer *del)
 }
 
 // Invoke the next timer - called from board hardware irq code.
-unsigned int IRAM_ATTR
+unsigned int
 sched_timer_dispatch(void)
 {
     // Invoke timer callback
@@ -213,7 +213,7 @@ sched_wake_tasks(void)
 }
 
 // Check if tasks need to be run
-uint8_t IRAM_ATTR
+uint8_t
 sched_tasks_busy(void)
 {
     return SchedStatus.tasks_status >= TS_REQUESTED;

@@ -94,7 +94,8 @@ console_sendf(const struct command_encoder *ce, va_list args)
     //uint8_t *buf = &transmit_buf[tmax];
     uint8_t *buf = &transmit_buf[0];
     uint_fast8_t msglen = command_encode_and_frame(buf, ce, args);
-    fwrite(&transmit_buf[0], 1, msglen, stdout);
+    //fwrite(&transmit_buf[0], 1, msglen, stdout);
+    printf("Message of %d bytes\n", msglen);
 
     // Start message transmit
     //writeb(&transmit_max, tmax + msglen);
