@@ -1,28 +1,28 @@
 SET(BASE_FILES 
-  "../sched.c"
-  "../basecmd.c"
-  "../command.c"
-  "../debugcmds.c")
+  "../src/sched.c"
+  "../src/basecmd.c"
+  "../src/command.c"
+  "../src/debugcmds.c")
 
 SET(BASE_GPIO_FILES 
-  "../initial_pins.c"
-  "../gpiocmds.c"
-  "../stepper.c"
-  "../endstop.c"
-  "../trsync.c")
+  "../src/initial_pins.c"
+  "../src/gpiocmds.c"
+  "../src/stepper.c"
+  "../src/endstop.c"
+  "../src/trsync.c")
 
-SET(BASE_ADC_FILES "../adccmds.c")
-SET(BASE_SPI_FILES "../spicmds.c" "../thermocouple.c")
-SET(BASE_I2C_FILES "../i2ccmds.c")
-SET(BASE_PWM_FILES "../pwmcmds.c")
-SET(BASE_BB_SPI_FILES "../spi_software.c" "../sensor_adxl345.c")
+SET(BASE_ADC_FILES "../src/adccmds.c")
+SET(BASE_SPI_FILES "../src/spicmds.c" "../src/thermocouple.c")
+SET(BASE_I2C_FILES "../src/i2ccmds.c")
+SET(BASE_PWM_FILES "../src/pwmcmds.c")
+SET(BASE_BB_SPI_FILES "../src/spi_software.c" "../src/sensor_adxl345.c")
 SET(BASE_BB_GPIO_FILES
-  "../lcd_st7920.c"
-  "../lcd_hd44780.c"
-  "../buttons.c"
-  "../tmcuart.c"
-  "../neopixel.c"
-  "../pulse_counter.c")
+  "../src/lcd_st7920.c"
+  "../src/lcd_hd44780.c"
+  "../src/buttons.c"
+  "../src/tmcuart.c"
+  "../src/neopixel.c"
+  "../src/pulse_counter.c")
 
 #${BASE_ADC_FILES}
 #${BASE_SPI_FILES}
@@ -32,20 +32,21 @@ SET(BASE_BB_GPIO_FILES
 #${BASE_BB_GPIO_FILES}
 
 SET(SRC_FILES
-  "main.c"
-  "timer.c"
-  "console.c"
-  "gpio.c"
+  "../src/esp/main.c"
+  "../src/esp/timer.c"
+  "../src/esp/console.c"
+  "../src/esp/gpio.c"
+  "../src/esp/usb_cdc.c"
   ${BASE_FILES}
   ${BASE_GPIO_FILES}
-  "../generic/alloc.c"
-  "../generic/crc16_ccitt.c")
+  "../src/generic/alloc.c"
+  "../src/generic/crc16_ccitt.c")
 
 idf_component_register(
     SRCS 
       ${SRC_FILES}
       ${PROJECT_BINARY_DIR}/compile_time_request.c
-    INCLUDE_DIRS "." "..")
+    INCLUDE_DIRS "../src" "../src/esp")
 
 file(GLOB_RECURSE O_FILES ${PROJECT_BINARY_DIR}/*.obj)
 file(WRITE ${PROJECT_BINARY_DIR}/ctr_process.sh 
