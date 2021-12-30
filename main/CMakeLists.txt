@@ -34,7 +34,6 @@ SET(BASE_BB_GPIO_FILES
 SET(SRC_FILES
   "../src/esp/main.c"
   "../src/esp/timer.c"
-  "../src/esp/console.c"
   "../src/esp/gpio.c"
   "../src/esp/usb_cdc.c"
   ${BASE_FILES}
