@@ -69,6 +69,44 @@ The following information is available in the
   forward direction minus the total number of steps taken in the
   reverse direction since the micro-controller was last restarted.
 
+## exclude_object
+
+The following information is available in the
+[exclude_object](Exclude_Object.md) object:
+
+- `objects`:  An array of the known objects as provided by the
+  `EXCLUDE_OBJECT_DEFINE` command.  This is the same information provided by
+  the `EXCLUDE_OBJECT VERBOSE=1` command. The `center` and `polygon` fields will
+  only be present if provided in the original `EXCLUDE_OBJECT_DEFINE`
+
+  Here is a JSON sample:
+```
+[
+  {
+    "polygon": [
+      [ 156.25, 146.2511675 ],
+      [ 156.25, 153.7488325 ],
+      [ 163.75, 153.7488325 ],
+      [ 163.75, 146.2511675 ]
+    ],
+    "name": "CYLINDER_2_STL_ID_2_COPY_0",
+    "center": [ 160, 150 ]
+  },
+  {
+    "polygon": [
+      [ 146.25, 146.2511675 ],
+      [ 146.25, 153.7488325 ],
+      [ 153.75, 153.7488325 ],
+      [ 153.75, 146.2511675 ]
+    ],
+    "name": "CYLINDER_2_STL_ID_1_COPY_0",
+    "center": [ 150, 150 ]
+  }
+]
+```
+- `excluded_objects`: An array of strings listing the names of excluded objects.
+- `current_object`: The name of the object currently being printed.
+
 ## fan
 
 The following information is available in
@@ -190,6 +228,19 @@ is always available):
 - `printing_time`: The amount of time (in seconds) the printer has
   been in the "Printing" state (as tracked by the idle_timeout
   module).
+
+## led
+
+The following information is available for each `[led led_name]`,
+`[neopixel led_name]`, `[dotstar led_name]`, `[pca9533 led_name]`, and
+`[pca9632 led_name]` config section defined in printer.cfg:
+- `color_data`: A list of color lists containing the RGBW values for a
+  led in the chain. Each value is represented as a float from 0.0 to
+  1.0. Each color list contains 4 items (red, green, blue, white) even
+  if the underyling LED supports fewer color channels. For example,
+  the blue value (3rd item in color list) of the second neopixel in a
+  chain could be accessed at
+  `printer["neopixel <config_name>"].color_data[1][2]`.
 
 ## mcu
 
@@ -406,13 +457,3 @@ The following information is available in the `z_tilt` object (this
 object is available if z_tilt is defined):
 - `applied`: True if the z-tilt leveling process has been run and completed
   successfully.
-
-## neopixel / dotstar
-
-The following information is available for each `[neopixel led_name]` and
-`[dotstar led_name]` defined in printer.cfg:
-- `color_data`:  An array of objects, with each object containing the RGBW
-  values for a led in the chain.  Note that not all configurations will contain
-  a white value.  Each value is represented as a float from 0 to 1.  For
-  example, the blue value of the second neopixel in a chain could be accessed
-  at `printer["neopixel <config_name>"].color_data[1].B`.
